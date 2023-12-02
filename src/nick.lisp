@@ -1,0 +1,20 @@
+(defun extract-digits (line)
+  (let ((first (find-if #'digit-char-p line))
+        (last (find-if #'digit-char-p (reverse line))))
+    (list first last)))
+
+(defun read-lines (file-path)
+  (with-open-file (stream file-path :direction :input)
+    (loop for line = (read-line stream nil)
+          while line
+          sum (let* ((digits (extract-digits line))
+                     (first-digit (string(first digits)))
+                     (last-digit  (string(second digits)))
+                     (combined (concatenate 'string first-digit last-digit))
+                     )
+                (format t "~a ~a ~a ~a ~c" line first-digit last-digit combined #\linefeed)
+                (parse-integer combined)))))
+
+(let ((file-path "day-one.txt"))
+  (setq total-lines (read-lines file-path))
+  (format t "Total sum of  digits: ~d" total-lines)) 
